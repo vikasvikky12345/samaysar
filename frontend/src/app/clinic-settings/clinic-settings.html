@@ -1,0 +1,84 @@
+<h1 class="text-2xl font-bold mb-4">Clinic settings</h1>
+
+@if (!isOwner) {
+  <div role="note" class="alert mb-4">Only the clinic owner can change these details.</div>
+}
+
+<form class="card bg-base-100 border border-base-300" [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <div class="card-body gap-2">
+    <div class="fieldset">
+      <label class="fieldset-legend" for="name">Clinic name</label>
+      <input id="name" class="input w-full" formControlName="name" maxlength="120"
+        [attr.aria-invalid]="showError('name')" aria-describedby="name-error" />
+      @if (showError('name')) {
+        <p id="name-error" class="text-error text-sm">Clinic name is required (up to 120 characters).</p>
+      }
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="address">Address</label>
+      <textarea id="address" class="textarea w-full" rows="2" formControlName="address" maxlength="300"
+        [attr.aria-invalid]="showError('address')" aria-describedby="address-error"></textarea>
+      @if (showError('address')) {
+        <p id="address-error" class="text-error text-sm">Up to 300 characters.</p>
+      }
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="city">City</label>
+      <input id="city" class="input w-full" formControlName="city" maxlength="80" autocomplete="address-level2"
+        [attr.aria-invalid]="showError('city')" aria-describedby="city-error" />
+      @if (showError('city')) {
+        <p id="city-error" class="text-error text-sm">Up to 80 characters.</p>
+      }
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-x-4">
+      <div class="fieldset">
+        <label class="fieldset-legend" for="phone">Phone</label>
+        <input id="phone" class="input w-full" type="tel" inputmode="numeric" maxlength="10" formControlName="phone"
+          [attr.aria-invalid]="showError('phone')" aria-describedby="phone-error" />
+        @if (showError('phone')) {
+          <p id="phone-error" class="text-error text-sm">Enter 10 digits.</p>
+        }
+      </div>
+      <div class="fieldset">
+        <label class="fieldset-legend" for="whatsapp">WhatsApp</label>
+        <input id="whatsapp" class="input w-full" type="tel" inputmode="numeric" maxlength="10" formControlName="whatsapp"
+          [attr.aria-invalid]="showError('whatsapp')" aria-describedby="whatsapp-error" />
+        @if (showError('whatsapp')) {
+          <p id="whatsapp-error" class="text-error text-sm">Enter 10 digits.</p>
+        }
+      </div>
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="mapUrl">Google Maps link</label>
+      <input id="mapUrl" class="input w-full" type="url" formControlName="mapUrl"
+        [attr.aria-invalid]="showError('mapUrl')" aria-describedby="mapUrl-error" />
+      @if (showError('mapUrl')) {
+        <p id="mapUrl-error" class="text-error text-sm">Enter a link starting with https://</p>
+      }
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="about">About the clinic</label>
+      <textarea id="about" class="textarea w-full" rows="4" formControlName="about" maxlength="1000"
+        [attr.aria-invalid]="showError('about')" aria-describedby="about-error"></textarea>
+      @if (showError('about')) {
+        <p id="about-error" class="text-error text-sm">Up to 1000 characters.</p>
+      }
+    </div>
+
+    @if (error()) {
+      <div role="alert" class="alert alert-error">{{ error() }}</div>
+    }
+    @if (saved()) {
+      <div role="status" class="alert alert-success">Clinic details saved.</div>
+    }
+
+    @if (isOwner) {
+      <button class="btn btn-primary w-full sm:w-auto sm:self-end" type="submit" [disabled]="busy() || !loaded()">Save</button>
+    }
+  </div>
+</form>

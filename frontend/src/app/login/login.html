@@ -1,0 +1,67 @@
+<main class="min-h-dvh flex items-center justify-center p-4">
+  <div class="card bg-base-100 border border-base-300 w-full max-w-sm">
+    <div class="card-body gap-4">
+      <img src="logo.svg" alt="Samaysar" class="h-10 w-auto self-start" />
+
+      @if (step() === 'mobile') {
+        <form class="flex flex-col gap-4" (submit)="$event.preventDefault(); sendOtp()" novalidate>
+          <h1 class="text-xl font-semibold">Log in or sign up</h1>
+          <div class="fieldset">
+            <label class="fieldset-legend" for="mobile">Mobile number</label>
+            <label class="input w-full">
+              <span class="label">+91</span>
+              <input
+                id="mobile"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel-national"
+                maxlength="10"
+                [formControl]="mobile"
+                [attr.aria-invalid]="mobile.touched && mobile.invalid"
+                aria-describedby="mobile-error"
+              />
+            </label>
+            @if (mobile.touched && mobile.invalid) {
+              <p id="mobile-error" class="text-error text-sm">Enter a 10-digit mobile number starting with 6, 7, 8 or 9.</p>
+            }
+          </div>
+          <button class="btn btn-primary w-full" type="submit" [disabled]="busy()">Send OTP</button>
+        </form>
+      } @else {
+        <form class="flex flex-col gap-4" (submit)="$event.preventDefault(); verify()" novalidate>
+          <h1 class="text-xl font-semibold">Enter the code</h1>
+          <p class="text-sm">We sent a 6-digit code to +91 {{ mobile.value }}.</p>
+          <div class="fieldset">
+            <label class="fieldset-legend" for="otp">OTP</label>
+            <input
+              #otpInput
+              id="otp"
+              class="input w-full tracking-widest"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              [formControl]="code"
+              [attr.aria-invalid]="code.touched && code.invalid"
+              aria-describedby="otp-error"
+            />
+            @if (code.touched && code.invalid) {
+              <p id="otp-error" class="text-error text-sm">Enter the 6-digit code.</p>
+            }
+          </div>
+          <button class="btn btn-primary w-full" type="submit" [disabled]="busy()">Verify</button>
+          <div class="flex justify-between gap-2">
+            <button class="btn btn-ghost" type="button" (click)="changeNumber()">Change number</button>
+            <button class="btn btn-ghost" type="button" (click)="sendOtp()" [disabled]="busy() || resendIn() > 0">
+              {{ resendIn() > 0 ? 'Resend in ' + resendIn() + 's' : 'Resend OTP' }}
+            </button>
+          </div>
+        </form>
+      }
+
+      @if (error()) {
+        <div role="alert" class="alert alert-error">{{ error() }}</div>
+      }
+    </div>
+  </div>
+</main>

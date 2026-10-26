@@ -1,0 +1,50 @@
+<header class="navbar bg-base-100 border-b border-base-300 px-4 gap-2">
+  <div class="flex-1 flex items-center gap-3 min-w-0">
+    <a routerLink="/app" class="shrink-0">
+      <img src="logo-mark.svg" alt="Samaysar" class="h-8 w-8 sm:hidden" />
+      <img src="logo.svg" alt="Samaysar" class="hidden h-8 w-auto sm:block" />
+    </a>
+    <span class="font-semibold truncate">{{ user()?.clinic?.name }}</span>
+    @if (trialDaysLeft() !== null) {
+      <span class="badge badge-accent shrink-0">
+        <span class="sm:hidden">Trial · {{ trialDaysLeft() }}d</span>
+        <span class="hidden sm:inline">Trial · {{ trialDaysLeft() }} {{ trialDaysLeft() === 1 ? 'day' : 'days' }} left</span>
+      </span>
+    }
+  </div>
+
+  <nav class="hidden sm:block" aria-label="Main">
+    <ul class="menu menu-horizontal gap-1">
+      <li><a routerLink="/app" routerLinkActive="menu-active" [routerLinkActiveOptions]="{ exact: true }">Today</a></li>
+      <li><a routerLink="/app/settings/clinic" routerLinkActive="menu-active">Clinic settings</a></li>
+      @if (isOwner()) {
+        <li><a routerLink="/app/staff" routerLinkActive="menu-active">Staff</a></li>
+      }
+    </ul>
+  </nav>
+
+  <details class="dropdown dropdown-end">
+    <summary class="btn btn-ghost max-w-24 sm:max-w-32"><span class="truncate">{{ user()?.name }}</span></summary>
+    <ul class="menu dropdown-content bg-base-100 rounded-box border border-base-300 z-10 w-48 p-2">
+      <li><button type="button" (click)="logout()">Logout</button></li>
+    </ul>
+  </details>
+</header>
+
+<main class="mx-auto max-w-3xl p-4 pb-24 sm:pb-4">
+  <router-outlet />
+</main>
+
+<nav class="dock sm:hidden bg-base-100 border-t border-base-300" aria-label="Main">
+  <a routerLink="/app" routerLinkActive="dock-active" [routerLinkActiveOptions]="{ exact: true }">
+    <span class="dock-label">Today</span>
+  </a>
+  <a routerLink="/app/settings/clinic" routerLinkActive="dock-active">
+    <span class="dock-label">Clinic</span>
+  </a>
+  @if (isOwner()) {
+    <a routerLink="/app/staff" routerLinkActive="dock-active">
+      <span class="dock-label">Staff</span>
+    </a>
+  }
+</nav>

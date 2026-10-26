@@ -1,0 +1,42 @@
+<main class="min-h-dvh flex items-center justify-center p-4">
+  <div class="card bg-base-100 border border-base-300 w-full max-w-sm">
+    <form class="card-body gap-4" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <img src="logo.svg" alt="Samaysar" class="h-10 w-auto self-start" />
+      <h1 class="text-xl font-semibold">Set up your clinic</h1>
+      <p class="text-sm">Free for 14 days. No card needed.</p>
+
+      <div class="fieldset">
+        <label class="fieldset-legend" for="ownerName">Your name</label>
+        <input id="ownerName" class="input w-full" autocomplete="name" formControlName="ownerName"
+          [attr.aria-invalid]="showError('ownerName')" aria-describedby="ownerName-error" />
+        @if (showError('ownerName')) {
+          <p id="ownerName-error" class="text-error text-sm">Enter your name (up to 120 characters).</p>
+        }
+      </div>
+
+      <div class="fieldset">
+        <label class="fieldset-legend" for="clinicName">Clinic name</label>
+        <input id="clinicName" class="input w-full" autocomplete="organization" formControlName="clinicName"
+          [attr.aria-invalid]="showError('clinicName')" aria-describedby="clinicName-error" />
+        @if (showError('clinicName')) {
+          <p id="clinicName-error" class="text-error text-sm">Enter the clinic name (up to 120 characters).</p>
+        }
+      </div>
+
+      <div class="fieldset">
+        <label class="fieldset-legend" for="city">City</label>
+        <input id="city" class="input w-full" autocomplete="address-level2" formControlName="city"
+          [attr.aria-invalid]="showError('city')" aria-describedby="city-error" />
+        @if (showError('city')) {
+          <p id="city-error" class="text-error text-sm">Enter the city (up to 80 characters).</p>
+        }
+      </div>
+
+      <button class="btn btn-primary w-full" type="submit" [disabled]="busy()">Create clinic</button>
+
+      @if (error()) {
+        <div role="alert" class="alert alert-error">{{ error() }}</div>
+      }
+    </form>
+  </div>
+</main>

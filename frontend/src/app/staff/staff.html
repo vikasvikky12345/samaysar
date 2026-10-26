@@ -1,0 +1,78 @@
+<h1 class="text-2xl font-bold mb-4">Staff</h1>
+
+@if (error()) {
+  <div role="alert" class="alert alert-error mb-4">{{ error() }}</div>
+}
+
+<ul class="flex flex-col gap-2 mb-6" aria-label="Staff members">
+  @for (s of staff(); track s.id) {
+    <li class="card bg-base-100 border border-base-300">
+      <div class="card-body p-4 flex-row flex-wrap items-center gap-3">
+        <div class="flex-1 min-w-40">
+          <p class="font-semibold">{{ s.name }}</p>
+          <p class="text-sm">{{ s.mobile }}</p>
+        </div>
+        @if (s.role === 'OWNER') {
+          <span class="badge badge-neutral">Owner</span>
+        } @else {
+          <label class="sr-only" [for]="'role-' + s.id">Role for {{ s.name }}</label>
+          <select #roleSel class="select w-36" [id]="'role-' + s.id" [value]="s.role"
+            (change)="update(s, { role: $any(roleSel.value) }, roleSel)">
+            <option value="DOCTOR">Doctor</option>
+            <option value="RECEPTION">Reception</option>
+          </select>
+          <label class="label cursor-pointer min-h-11 gap-2">
+            <input #activeBox type="checkbox" class="toggle toggle-success" [checked]="s.active"
+              (change)="update(s, { active: activeBox.checked }, activeBox)" />
+            Active
+          </label>
+        }
+      </div>
+    </li>
+  } @empty {
+    <li>No staff yet.</li>
+  }
+</ul>
+
+<form class="card bg-base-100 border border-base-300" [formGroup]="form" (ngSubmit)="add()" novalidate>
+  <div class="card-body gap-2">
+    <h2 class="card-title">Add staff</h2>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="staff-name">Name</label>
+      <input id="staff-name" class="input w-full" formControlName="name" maxlength="120"
+        [attr.aria-invalid]="showError('name')" aria-describedby="staff-name-error" />
+      @if (showError('name')) {
+        <p id="staff-name-error" class="text-error text-sm">Enter a name (up to 120 characters).</p>
+      }
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="staff-mobile">Mobile number</label>
+      <label class="input w-full">
+        <span class="label">+91</span>
+        <input id="staff-mobile" type="tel" inputmode="numeric" maxlength="10" formControlName="mobile"
+          [attr.aria-invalid]="showError('mobile')" aria-describedby="staff-mobile-error" />
+      </label>
+      @if (showError('mobile')) {
+        <p id="staff-mobile-error" class="text-error text-sm">
+          @if (form.controls.mobile.hasError('taken')) {
+            This mobile number is already registered.
+          } @else {
+            Enter a 10-digit mobile number starting with 6, 7, 8 or 9.
+          }
+        </p>
+      }
+    </div>
+
+    <div class="fieldset">
+      <label class="fieldset-legend" for="staff-role">Role</label>
+      <select id="staff-role" class="select w-full" formControlName="role">
+        <option value="DOCTOR">Doctor</option>
+        <option value="RECEPTION">Reception</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary w-full sm:w-auto sm:self-end" type="submit" [disabled]="busy()">Add staff</button>
+  </div>
+</form>
