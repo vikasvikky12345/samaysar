@@ -1,0 +1,55 @@
+<header class="navbar bg-base-100 border-b border-base-300 px-4">
+  <a routerLink="/" class="flex items-center">
+    <img src="logo.svg" alt="Samaysar" class="h-9 w-auto">
+  </a>
+</header>
+
+<!-- Brand preview: replace with real routes once the first page exists -->
+<main class="mx-auto max-w-3xl p-4 space-y-6">
+  <h1 class="text-2xl font-bold">Samaysar brand preview</h1>
+
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    @for (c of colors; track c.name) {
+      <div class="rounded-box overflow-hidden border border-base-300 bg-base-100">
+        <div class="h-14" [class]="c.swatch"></div>
+        <p class="p-2 text-sm"><span class="font-semibold">{{ c.name }}</span><br>{{ c.hex }}</p>
+      </div>
+    }
+  </section>
+
+  <section class="card bg-base-100 border border-base-300">
+    <div class="card-body">
+      <div class="flex items-center justify-between">
+        <h2 class="card-title">Dr. Demo · Morning session</h2>
+        <span class="badge badge-accent">Your turn is near</span>
+      </div>
+      <p class="text-5xl font-bold text-primary">#12</p>
+      <p>Now serving · you are #14 · about 15 min</p>
+      <div class="card-actions">
+        <button class="btn btn-primary">Call next</button>
+        <button class="btn btn-outline btn-primary">Add walk-in</button>
+        <button class="btn btn-ghost text-error">Mark no-show</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex flex-wrap gap-2">
+    <span class="badge badge-neutral">Booked</span>
+    <span class="badge badge-info">Arrived</span>
+    <span class="badge badge-accent">In consultation</span>
+    <span class="badge badge-success">Done</span>
+    <span class="badge badge-error">No-show</span>
+  </section>
+
+  <section class="card bg-base-100 border border-base-300">
+    <div class="card-body gap-3">
+      <label class="input w-full">
+        <span class="label">+91</span>
+        <input type="tel" inputmode="numeric" placeholder="Mobile number" autocomplete="tel-national">
+      </label>
+      <button class="btn btn-success w-full">Verify on WhatsApp</button>
+    </div>
+  </section>
+</main>
+
+<router-outlet />
